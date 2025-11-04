@@ -22,15 +22,15 @@ jobs:
         run: |
           scp -o StrictHostKeyChecking=no -r ansible/web ubuntu@${{ secrets.EC2_PUBLIC_IP }}:/home/ubuntu/
 
-      - name: Deploy container
+           - name: Deploy container
         run: |
           ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.EC2_PUBLIC_IP }} << 'EOC'
             cd /home/ubuntu/web
-            CONTAINERS=$(docker ps -q)
+            CONTAINERS=$(sudo docker ps -q)
             if [ ! -z "$CONTAINERS" ]; then
-              docker stop $CONTAINERS
-              docker rm $CONTAINERS
+              sudo docker stop $CONTAINERS
+              sudo docker rm $CONTAINERS
             fi
-            docker build -t myapp .
-            docker run -d -p 80:80 myapp
+            sudo docker build -t myapp .
+            sudo docker run -d -p 80:80 myapp
           EOC
