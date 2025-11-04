@@ -1,0 +1,22 @@
+---
+- name: Deploy Registration Form Container
+  hosts: regform
+  become: yes
+  tasks:
+    - name: Copy Dockerfile and index.html to server
+      copy:
+        src: "{{ item }}"
+        dest: /home/ubuntu/
+      with_items:
+        - Dockerfile
+        - index.html
+
+    - name: Build Docker image
+      command: docker build -t regform-app /home/ubuntu/
+
+    - name: Stop old container if running
+      command: docker rm -f regform-app
+      ignore_errors: yes
+
+    - name: Run new container
+      command: docker run -d -p 80:80 --name regform-app regform-app
