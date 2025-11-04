@@ -20,17 +20,17 @@ jobs:
 
       - name: Copy files to EC2
         run: |
-          scp -o StrictHostKeyChecking=no -r ansible/web ubuntu@${{ secrets.EC2_HOST }}:/home/ubuntu/
+          scp -o StrictHostKeyChecking=no -r ansible/web ubuntu@${{ secrets.EC2_PUBLIC_IP }}:/home/ubuntu/
 
       - name: Deploy container
         run: |
-          ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.EC2_HOST }} << 'EOC'
-            cd ansible/web
+          ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.EC2_PUBLIC_IP }} << 'EOC'
+            cd /home/ubuntu/web
             CONTAINERS=$(docker ps -q)
             if [ ! -z "$CONTAINERS" ]; then
               docker stop $CONTAINERS
               docker rm $CONTAINERS
             fi
-            docker build -t regform-app .
-            docker run -d -p 80:80 regform-app
+            docker build -t myapp .
+            docker run -d -p 80:80 myapp
           EOC
