@@ -20,12 +20,12 @@ jobs:
 
       - name: Copy files to EC2
         run: |
-          scp -o StrictHostKeyChecking=no -r web ubuntu@${{ secrets.EC2_HOST }}:/home/ubuntu/
+          scp -o StrictHostKeyChecking=no -r ansible/web ubuntu@${{ secrets.EC2_HOST }}:/home/ubuntu/
 
       - name: Deploy container
         run: |
           ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.EC2_HOST }} << 'EOC'
-            cd web
+            cd ansible/web
             CONTAINERS=$(docker ps -q)
             if [ ! -z "$CONTAINERS" ]; then
               docker stop $CONTAINERS
