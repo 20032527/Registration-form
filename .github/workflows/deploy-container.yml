@@ -22,7 +22,7 @@ jobs:
         run: |
           scp -o StrictHostKeyChecking=no -r ansible/web ubuntu@${{ secrets.EC2_PUBLIC_IP }}:/home/ubuntu/
 
-           - name: Deploy container
+      - name: Deploy container
         run: |
           ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.EC2_PUBLIC_IP }} << 'EOC'
             cd /home/ubuntu/web
